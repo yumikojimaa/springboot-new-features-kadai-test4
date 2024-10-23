@@ -29,8 +29,8 @@
 						</nav>
 
 						<!-- お気に入り追加 -->
-						<div sec:authorize="isAuthenticated()">
-							<div th:unless="${success}">
+						<div sec:authorize="isAuthenticated()"style="display: flex; justify-content: flex-end; align-items: flex-start; margin-top: -5px;">
+							<div th:if="${favoriteId == null}">
 								<a th:href="@{/houses/{id}/create(id=${house.getId()})}"
 									onclick="event.preventDefault(); document.getElementById('favoriteRegisterFormAdd').submit();">
 									&#9825 お気に入り追加
@@ -39,12 +39,10 @@
 									th:action="@{/houses/{id}/create(id=${house.getId()})}"
 									th:object="${favoriteRegisterForm}">
 									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-									<input type="hidden" th:field="*{houseId}" />
-									<input type="hidden" th:field="*{userId}" />
 								</form>
 							</div>
 
-							<div th:if="${success}">
+							<div th:if="${favoriteId != null}">
 								<a th:href="@{/houses/{id}/delete(id=${house.getId()})}"
 									onclick="event.preventDefault(); document.getElementById('favoriteRegisterFormDelete').submit();">
 									&#9829 お気に入り解除
@@ -52,8 +50,6 @@
 								<form id="favoriteRegisterFormDelete" style="display: none;" method="post"
 									th:action="@{/houses/{id}/delete(id=${house.getId()})}">
 									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-									<input type="hidden" th:field="*{houseId}" />
-									<input type="hidden" th:field="*{userId}" />
 								</form>
 							</div>
 						</div>

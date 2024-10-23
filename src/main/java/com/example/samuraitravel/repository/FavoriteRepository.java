@@ -20,4 +20,5 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Integer> {
 	
 	public Favorite getByHouseIdAndUserId(Integer houseId, Integer userId);
 	
+	
 }

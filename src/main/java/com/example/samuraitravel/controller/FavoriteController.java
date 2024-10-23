@@ -60,6 +60,8 @@ public class FavoriteController {
 	        Integer userId = userDetailsImpl.getUser().getId();
 	        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
 	        House house = houseRepository.findById(houseId).orElseThrow(() -> new RuntimeException("House not found"));
+	        
+	        
 	        FavoriteRegisterForm form = new FavoriteRegisterForm();
 	        form.setHouseId(house.getId());
 	        form.setUserId(user.getId());

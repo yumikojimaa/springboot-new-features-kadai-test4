@@ -26,10 +26,13 @@ import com.example.samuraitravel.security.UserDetailsImpl;
 public class HouseController {
 	private final HouseRepository houseRepository;
 	private final ReviewRepository reviewRepository;
-
-	public HouseController(HouseRepository houseRepository,ReviewRepository reviewRepository) {
+	private final FavoriteRepository favoriteRepository;
+	
+	public HouseController(HouseRepository houseRepository,
+			ReviewRepository reviewRepository, FavoriteRepository favoriteRepository) {
 		this.houseRepository = houseRepository;
 		this.reviewRepository = reviewRepository;
+		this.favoriteRepository = favoriteRepository;
 	}
 
 	@GetMapping
@@ -117,6 +120,20 @@ public class HouseController {
 	        var hasNotMyReview = reviewPage.filter(review -> review.getUser().getId().equals(userDetailsImpl.getUser().getId())).isEmpty();
 	        // 上記のチェック結果をviwにわたす。
 	        model.addAttribute("hasNotMyReview", hasNotMyReview);
+	        
+	        var favoriteList = this.favoriteRepository.findByHouse(house);
+            if (favoriteList.isEmpty()) {
+                    model.addAttribute("favoriteId", null);
+            } else {
+                    var favorites = favoriteList.stream()
+                                    .filter(it -> it.getUser().getId().equals(userDetailsImpl.getUser().getId())).toList();
+                    if (favorites.isEmpty()) {
+                            model.addAttribute("favoriteId", null);
+                    } else {
+                            model.addAttribute("favoriteId", favorites.get(0).getId());
+                    }
+            }
+
 	    } else {
 	        // ログインしていないときは、そもそもボタンの表示がされないが、念の為trueを設定しておく
 	        model.addAttribute("hasNotMyReview", true);
